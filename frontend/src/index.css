@@ -1,0 +1,135 @@
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/jetbrains-mono";
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: "Playfair Display Variable", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans Variable", sans-serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #faf7f2;
+  --foreground: #1a2420;
+  --card: #fffdfa;
+  --card-foreground: #1a2420;
+  --popover: #fffdfa;
+  --popover-foreground: #1a2420;
+  --primary: #143d2b;
+  --primary-foreground: #f3efe6;
+  --secondary: #f3efe6;
+  --secondary-foreground: #143d2b;
+  --muted: #f3efe6;
+  --muted-foreground: #68766c;
+  --accent: #d97706;
+  --accent-foreground: #fffdfa;
+  --destructive: #b42318;
+  --border: #e6dec7;
+  --input: #d8d4c8;
+  --ring: #1e5e41;
+  --chart-1: #1e5e41;
+  --chart-2: #d97706;
+  --chart-3: #7f9f72;
+  --chart-4: #8c6a46;
+  --chart-5: #2c221e;
+  --radius: 0.75rem;
+  --sidebar: #f3efe6;
+  --sidebar-foreground: #1a2420;
+  --sidebar-primary: #143d2b;
+  --sidebar-primary-foreground: #f3efe6;
+  --sidebar-accent: #d8e6d1;
+  --sidebar-accent-foreground: #143d2b;
+  --sidebar-border: #e6dec7;
+  --sidebar-ring: #1e5e41;
+}
+
+.dark {
+  --background: #0a120e;
+  --foreground: #f3f7f4;
+  --card: #14231a;
+  --card-foreground: #f3f7f4;
+  --popover: #14231a;
+  --popover-foreground: #f3f7f4;
+  --primary: #2b6d4d;
+  --primary-foreground: #f3f7f4;
+  --secondary: #162820;
+  --secondary-foreground: #f3f7f4;
+  --muted: #162820;
+  --muted-foreground: #a8bcab;
+  --accent: #f59e0b;
+  --accent-foreground: #0a120e;
+  --destructive: #f87171;
+  --border: #233d2f;
+  --input: #31563e;
+  --ring: #48bb78;
+  --chart-1: #48bb78;
+  --chart-2: #f59e0b;
+  --chart-3: #9dc592;
+  --chart-4: #d8a374;
+  --chart-5: #f3efe6;
+  --sidebar: #121e18;
+  --sidebar-foreground: #f3f7f4;
+  --sidebar-primary: #38a169;
+  --sidebar-primary-foreground: #f3f7f4;
+  --sidebar-accent: #162820;
+  --sidebar-accent-foreground: #f3f7f4;
+  --sidebar-border: #233d2f;
+  --sidebar-ring: #48bb78;
+}
+
+@keyframes soft-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { @apply scroll-smooth font-sans; }
+  body { @apply bg-background text-foreground antialiased; }
+  ::selection { background: #d8e6d1; color: #143d2b; }
+}
+
+.font-serif { font-family: "Playfair Display Variable", Georgia, serif; }
+.eyebrow { @apply font-mono text-[10px] font-semibold uppercase tracking-[0.2em]; }
+button, a, input, select, textarea { transition-property: color, background-color, border-color, opacity, transform, box-shadow; }

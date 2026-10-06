@@ -1,0 +1,74 @@
+{
+  "iteration": 2,
+  "summary": "Retest confirms fix: Toaster is now mounted in src/App.tsx, and the 'Scenario recalculated' toast is visible after clicking Calculate yield. 6 backend tests passed, 6 browser checks passed (1 new toast-focused check added, 5 pre-existing checks re-ran clean). No bugs found.",
+  "passed": 9,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "GET /api/predictions/model returns Random Forest metadata",
+      "name": "test_tscheck_model_metadata.py::test_model_metadata",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "Re-ran suite: 6 passed in 0.80s (cd /app/backend && python -m pytest -q)"
+    },
+    {
+      "criterion": "POST /api/predictions with a valid body returns a full prediction",
+      "name": "test_tscheck_prediction_valid.py::test_prediction_valid_body",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "Re-ran suite: 6 passed in 0.80s"
+    },
+    {
+      "criterion": "POST /api/predictions rejects invalid input",
+      "name": "test_tscheck_prediction_invalid.py (4 tests)",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "Re-ran suite: 6 passed in 0.80s"
+    },
+    {
+      "criterion": "Changing inputs and clicking Calculate yield updates results and shows a toast",
+      "name": "prediction-calculate-shows-toast",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Ran against public preview URL https://waste-yield.preview.emergentagent.com. Confirmed grep: src/App.tsx line 3 imports Toaster from @/components/ui/sonner, line 12 renders <Toaster position=\"bottom-right\" richColors />. Clicked prediction-preset-15t-hotel then prediction-calculate-button; getByText('Scenario recalculated') became visible within 10s. No HTTP>=400 responses, no pageerrors. Screenshot captured showing toast."
+    },
+    {
+      "criterion": "Prediction dashboard loads an initial scenario from the server",
+      "name": "prediction-dashboard-loads-initial-scenario",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check, passed (regression check, not a newly targeted criterion this iteration)."
+    },
+    {
+      "criterion": "Changing inputs and clicking Calculate yield updates results",
+      "name": "prediction-calculate-updates-results",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check, passed (regression check)."
+    },
+    {
+      "criterion": "Feature importance chart and AI recommendations render",
+      "name": "prediction-feature-importance-and-insights",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check, passed (regression check)."
+    },
+    {
+      "criterion": "Quick scenario presets work",
+      "name": "prediction-preset-15t-hotel-works",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check, passed (regression check)."
+    },
+    {
+      "criterion": "Whole site still renders without errors",
+      "name": "home-site-renders-and-nav-scrolls",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check, passed (regression check); partnership form NOT submitted."
+    }
+  ]
+}

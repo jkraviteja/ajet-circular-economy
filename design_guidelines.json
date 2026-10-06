@@ -1,0 +1,219 @@
+{
+  "project_name": "AJET - Circular Economy & AI Organic Waste Transformation",
+  "theme": {
+    "default_mode": "light",
+    "theme_toggle": true,
+    "archetype": "ARCHETYPE 1: ORGANIC & EARTHY with high-precision clean sustainability tech",
+    "philosophy": "Nothing is Waste. It’s Just a Resource in the Wrong Place. Tactical bio-circular aesthetic blending rich earthy forest greens, deep loam, crisp clay ochre accents, warm sand backgrounds, and glassmorphic telemetry cards."
+  },
+  "typography": {
+    "headline_font": "'Playfair Display Variable', Georgia, serif",
+    "body_font": "'Plus Jakarta Sans Variable', 'DM Sans Variable', sans-serif",
+    "mono_font": "'JetBrains Mono Variable', monospace",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight leading-[1.1]",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-serif font-semibold tracking-tight text-emerald-950 dark:text-emerald-50",
+      "h3": "text-xl sm:text-2xl font-serif font-medium tracking-tight",
+      "h4": "text-lg sm:text-xl font-sans font-semibold tracking-normal",
+      "body": "text-base sm:text-lg font-sans text-stone-700 dark:text-stone-300 leading-relaxed",
+      "label_overline": "text-xs font-mono uppercase tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-400"
+    }
+  },
+  "color_palette": {
+    "light": {
+      "bg_primary": "#FAF7F2",
+      "bg_surface": "#FFFFFF",
+      "bg_surface_subtle": "#F3EFE6",
+      "forest_primary": "#143D2B",
+      "forest_emerald": "#1E5E41",
+      "leaf_accent": "#2E8B57",
+      "warm_amber_clay": "#D97706",
+      "loam_soil": "#2C221E",
+      "sand_border": "#E6DEC7",
+      "text_main": "#1A2420",
+      "text_muted": "#526058"
+    },
+    "dark": {
+      "bg_primary": "#0A120E",
+      "bg_surface": "#121E18",
+      "bg_surface_subtle": "#162820",
+      "forest_primary": "#276749",
+      "forest_emerald": "#38A169",
+      "leaf_accent": "#48BB78",
+      "warm_amber_clay": "#F59E0B",
+      "loam_soil": "#F5F5F4",
+      "sand_border": "#233D2F",
+      "text_main": "#F3F7F4",
+      "text_muted": "#9FB5A9"
+    }
+  },
+  "key_sections": [
+    {
+      "id": "hero",
+      "name": "Hero Section",
+      "headline": "What if yesterday’s waste could become tomorrow’s resource?",
+      "subheadline": "AJET pioneers industrial-grade bio-transformation. From food scraps and crop residues to regenerative organic compost, clean biomethane energy, and high-nitrogen soil enhancers.",
+      "ctas": [
+        { "label": "Simulate Waste Yield", "target": "#prediction-dashboard", "primary": true },
+        { "label": "Explore Our Process", "target": "#process", "primary": false }
+      ],
+      "visual_assets": {
+        "badge": "Circular Bio-Economy & Machine Learning",
+        "live_ticker": "14,820 Tons Diverted This Quarter"
+      }
+    },
+    {
+      "id": "story",
+      "name": "Our Story & The Problem",
+      "narrative": "Every day, millions of tons of organic matter decompose into open landfills, releasing potent methane and stripping agricultural soils of vital organic carbon. AJET re-engineers this broken loop through automated micro-climate composting and anaerobic digestion.",
+      "pillars": [
+        { "title": "The Landfill Dilemma", "detail": "Organic waste generates up to 16% of global methane emissions when left in anaerobic heaps." },
+        { "title": "The Depleted Soil Crisis", "detail": "Intensive chemical agriculture has degraded over 33% of global topsoil humus." },
+        { "title": "The Closed-Loop Reversal", "detail": "AJET converts verified organic feedstock into certified soil enhancers, green heat, and animal feed." }
+      ]
+    },
+    {
+      "id": "process",
+      "name": "Our 4-Stage Closed-Loop Process",
+      "stages": [
+        { "step": "01", "name": "Collection", "desc": "Smart sensor-tracked bins & scheduled bulk pickup from food processors, hotels, and agricultural cooperatives." },
+        { "step": "02", "name": "Segregation & De-packaging", "desc": "High-torque automated depackagers isolate clean organic pulp with 99.4% purity from contaminations." },
+        { "step": "03", "name": "Micro-Aerobic Processing", "desc": "Controlled thermal aerobic digestion and anaerobic chambers with continuous moisture & gas telemetry." },
+        { "step": "04", "name": "Bio-Transformation & Refinement", "desc": "Enrichment into high-grade humic compost, bottled bio-fertilizers, and scrubbed biomethane grid fuel." }
+      ]
+    },
+    {
+      "id": "products",
+      "name": "Circular Products & Outputs",
+      "items": [
+        { "name": "AJET Humus Gold Organic Compost", "category": "Soil Regeneration", "desc": "Thermodynamically stabilized compost with over 45% active organic matter." },
+        { "name": "BioGrid Pure Methane & Power", "category": "Renewable Energy", "desc": "97% methane purity bio-CNG for agricultural fleets and zero-emission turbine power." },
+        { "name": "Liquid Nitrogen-Potash Enhancer", "category": "Crop Nutrition", "desc": "Fermented foliar nutrient extract that cuts synthetic fertilizer dependency by 40%." },
+        { "name": "Sustainable Insect/Poultry Feed Precursor", "category": "Feed Ingredients", "desc": "High-protein dehydrated organic solids rigorously analyzed for animal feed safety." },
+        { "name": "Urban Micro-Gardening Soil Blends", "category": "Consumer Gardening", "desc": "Pre-inoculated potting mixes for rooftop farms, nursery growers, and green spaces." }
+      ]
+    },
+    {
+      "id": "second-life",
+      "name": "Second Life Interactive Visualizer",
+      "concept": "Before vs After Interactive Slider / Interactive toggle showing raw rotting banana peels/brewery mash transforming into jet-black crumbly potting humus and glowing clean energy flames."
+    },
+    {
+      "id": "impact",
+      "name": "Live Impact Telemetry",
+      "metrics": [
+        { "id": "metric-diverted", "value": "184,250+", "label": "Tons of Organic Waste Diverted", "subtext": "Prevented from decomposing into open municipal dumps" },
+        { "id": "metric-co2", "value": "78,400", "label": "Tons CO₂e Prevented", "subtext": "Methane oxidation offset equivalent to 17,000 cars" },
+        { "id": "metric-products", "value": "92,100", "label": "Tons Regenerative Products Made", "subtext": "Delivered to regional farms, nurseries, and clean grids" },
+        { "id": "metric-farmers", "value": "410+", "label": "Growers & Agro-businesses Supported", "subtext": "Yield improvements averaging +22% in year one" }
+      ]
+    },
+    {
+      "id": "prediction-dashboard",
+      "name": "AI Waste Prediction & Product Yield Dashboard",
+      "inputs": {
+        "waste_type": ["Fruit & Vegetable Market Residue", "Spent Brewery Mash & Grains", "Hotel & Cafeteria Food Scraps", "Agricultural Crop Stover", "Dairy & Coffee Processing Slurry"],
+        "quantity_tons": { "min": 1, "max": 500, "default": 45 },
+        "source_location": ["Urban Hospitality Hub", "Regional Agro-Cooperative", "Food Processing Industrial Park", "Wholesale Produce Terminal"],
+        "season": ["Spring / Flush", "Summer / Peak High Sugar", "Autumn / Harvest High Fiber", "Winter / Dense Starchy"],
+        "moisture_level": { "min": 20, "max": 85, "default": 65 }
+      },
+      "predicted_outputs": {
+        "compost_yield_tons": "Dynamic calculated formula with moisture adjustment",
+        "biogas_yield_m3": "High calorific conversion for food scraps & brewery residues",
+        "liquid_enhancer_liters": "Derived leachate and condensed nutrient fraction",
+        "estimated_market_value_usd": "Priced using live local organic market indices",
+        "co2_reduction_tons": "Formula based on IPCC landfill avoidance factors",
+        "processing_time_days": "18 to 28 days based on moisture and feedstock chemistry"
+      },
+      "interactive_elements": [
+        "Recharts yield composition bar & donut breakdown",
+        "Monthly projected yield trajectory chart",
+        "Transparent demo model banner with 'Mock / Sample Data Engine' tag and API swap hook notice",
+        "Instant scenario preset chips (e.g. '50t Brewery Spent Grain', '120t Wholesale Market', '15t Hotel Kitchen')"
+      ]
+    },
+    {
+      "id": "partner",
+      "name": "Partner With AJET",
+      "form_fields": ["Full Name", "Organization / Farm Name", "Organization Type", "Estimated Monthly Waste (Tons)", "Work Email", "Message"],
+      "action_type": "Interactive submission with validation, feedback state, and instant confirmation toast via Sonner"
+    },
+    {
+      "id": "final-cta",
+      "name": "Final Call To Action",
+      "headline": "Ready to turn your waste stream into high-yield regenerative capital?",
+      "button_label": "Schedule a Bio-Stream Audit"
+    }
+  ],
+  "image_urls": {
+    "hero_banner": "https://images.unsplash.com/photo-1621459557554-60a70d3d61ce?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHwzfHxjb21wb3N0JTIwc29pbCUyMGFncmljdWx0dXJlfGVufDB8fHx8MTc5MTI5MzY4MHww&ixlib=rb-4.1.0&q=85",
+    "compost_holding_soil": "https://images.unsplash.com/photo-1642952273588-ed6fa28870ac?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHwyfHxjb21wb3N0JTIwc29pbCUyMGFncmljdWx0dXJlfGVufDB8fHx8MTc5MTI5MzY4MHww&ixlib=rb-4.1.0&q=85",
+    "rich_dark_soil": "https://images.unsplash.com/photo-1613036582025-ba1d4ccb3226?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHwxfHxjb21wb3N0JTIwc29pbCUyMGFncmljdWx0dXJlfGVufDB8fHx8MTc5MTI5MzY4MHww&ixlib=rb-4.1.0&q=85",
+    "hand_soil_sprinkling": "https://images.unsplash.com/photo-1693414853994-1080baaacb4d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHw0fHxjb21wb3N0JTIwc29pbCUyMGFncmljdWx0dXJlfGVufDB8fHx8MTc5MTI5MzY4MHww&ixlib=rb-4.1.0&q=85",
+    "organic_waste_sorting": "https://images.pexels.com/photos/7512977/pexels-photo-7512977.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "biogas_plant_aerial": "https://images.unsplash.com/photo-1786913507786-f0d6bf11b2ed?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxncmVlbiUyMGJpb2dhcyUyMHN1c3RhaW5hYmxlJTIwZmFybXxlbnwwfHx8fDE3OTEyOTM2ODB8MA&ixlib=rb-4.1.0&q=85",
+    "biogas_digester_facility": "https://images.unsplash.com/photo-1786913508060-2da30cfc5101?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwxfHxncmVlbiUyMGJpb2dhcyUyMHN1c3RhaW5hYmxlJTIwZmFybXxlbnwwfHx8fDE3OTEyOTM2ODB8MA&ixlib=rb-4.1.0&q=85"
+  },
+  "component_structure": {
+    "header": {
+      "path": "frontend/src/components/Navbar.jsx",
+      "description": "Sticky glassmorphic navbar with logo, nav links (Story, Process, Products, Second Life, Impact, AI Predictor), dark/light theme switch, and 'Audit Waste' CTA button."
+    },
+    "hero": {
+      "path": "frontend/src/components/Hero.jsx",
+      "description": "Bold visual hero with organic ambient glow, tag chip, dual CTAs, live metric pill, and high-impact crop & soil imagery."
+    },
+    "story": {
+      "path": "frontend/src/components/OurStory.jsx",
+      "description": "Asymmetric editorial section comparing linear landfill waste to circular biological regeneration."
+    },
+    "process": {
+      "path": "frontend/src/components/ProcessTimeline.jsx",
+      "description": "Interactive 4-step circular flow diagram with active stage preview, telemetry data, and visual iconography."
+    },
+    "products": {
+      "path": "frontend/src/components/ProductsShowcase.jsx",
+      "description": "Bento-style product catalog highlighting Humus Gold, Biogas, Liquid bio-nutrients, feed ingredients, and garden blends."
+    },
+    "second_life": {
+      "path": "frontend/src/components/SecondLifeTransformer.jsx",
+      "description": "Interactive Before/After slider & toggle illustrating raw discarded feedstock transitioning to finished high-value products."
+    },
+    "impact_telemetry": {
+      "path": "frontend/src/components/ImpactCounters.jsx",
+      "description": "Animated counters for waste diverted, CO2 avoided, products made, and local growers empowered."
+    },
+    "ai_dashboard": {
+      "path": "frontend/src/components/AIPredictionDashboard.jsx",
+      "description": "Fully functional waste prediction tool: input waste type, quantity, location, season, moisture level; outputs volume, compost yield, biogas, revenue value, and CO2 reduction using interactive charts and KPI cards. Transparently tagged as demo ML engine with clear architecture ready for live model hook."
+    },
+    "partner_form": {
+      "path": "frontend/src/components/PartnerSection.jsx",
+      "description": "Enterprise and farmer partnership contact form with interactive validation, sector selector, volume slider, and instant submission state."
+    },
+    "footer": {
+      "path": "frontend/src/components/Footer.jsx",
+      "description": "Deep forest contrast footer with big brand typography, circular economy statement, quick navigation links, certifications, and copyright."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Use pure JavaScript/JSX files (e.g. .jsx, .js) as specified in instructions.",
+    "Import Lucide icons cleanly from 'lucide-react'.",
+    "Use 'sonner' for toast notifications on contact form and preset prediction loads.",
+    "Use 'recharts' (ResponsiveContainer, BarChart, AreaChart, PieChart, Cell, Tooltip, XAxis, YAxis) for the AI Prediction Dashboard visual analytics.",
+    "Implement the theme toggle using the already installed 'next-themes' or local state toggle to alternate smoothly between organic light mode and dark bio-tech mode.",
+    "Ensure every interactive element and key informational metric includes unambiguous 'data-testid' attributes (e.g., data-testid='predict-calculate-btn', data-testid='waste-quantity-slider', data-testid='partner-submit-btn').",
+    "Never use generic flat gray backgrounds. Use warm organic tones (oklch/hex #FAF7F2, deep forest green #143D2B, clay amber accents) in light mode, and obsidian deep pine in dark mode.",
+    "Ensure high contrast on all text elements (APCA/WCAG compliant). Never place faint green on pale white."
+  ],
+  "universal_guidelines": {
+    "spacing": "Generous spacing philosophy (py-24, gap-8 to gap-12), avoid cramped containers.",
+    "glassmorphism": "Used for sticky header and dashboard telemetry panels with backdrop-blur-xl and delicate 1px border-emerald-900/10.",
+    "anti_slop_rules": [
+      "No generic centered plain text with floating icons.",
+      "No robotic placeholder text or lorem ipsum; provide realistic circular bio-tech metrics.",
+      "Hero image must have subtle gradient overlay (bg-black/30 to bg-black/45) so the photographic quality shines through."
+    ]
+  }
+}

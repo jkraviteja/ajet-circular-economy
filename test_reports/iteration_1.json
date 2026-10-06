@@ -1,0 +1,77 @@
+{
+  "iteration": 1,
+  "summary": "6 backend tests passed, 5 browser checks passed. 1 bug found: sonner Toaster is never mounted in the app, so success/error toasts configured in PredictionDashboard/PartnerSection never render visually.",
+  "passed": 8,
+  "failed": 0,
+  "bugs": [
+    {
+      "severity": "low",
+      "criterion": "Changing inputs and clicking Calculate yield updates results",
+      "description": "toast.success('Scenario recalculated') is called on successful prediction (and toast.error on failure, and in PartnerSection) but no <Toaster /> component from sonner is ever mounted in src/main.tsx or src/App.tsx. The toast calls fire with no visual effect — confirmed by grepping the codebase (no '<Toaster' usage anywhere) and by the browser check failing to find the toast text after clicking Calculate.",
+      "evidence": "grep -rn \"<Toaster\" /app/frontend/src -> no results. src/main.tsx renders QueryClientProvider > BrowserRouter > App with no Toaster. Browser check 'prediction-calculate-updates-results' with a getByText('Scenario recalculated') assertion timed out after 10s (element not found) while the KPI values and results panel updated correctly, proving the request succeeded but the toast never rendered.",
+      "fix_suggestion": "Add <Toaster /> from components/ui/sonner.tsx to main.tsx or App.tsx so toast calls actually render."
+    }
+  ],
+  "action_items": [
+    "Mount <Toaster /> (from src/components/ui/sonner.tsx) in main.tsx/App.tsx so success/error toasts become visible to users — affects PredictionDashboard calculate flow and PartnerSection submit flow."
+  ],
+  "retest_needed": true,
+  "checks": [
+    {
+      "criterion": "GET /api/predictions/model returns Random Forest metadata",
+      "name": "test_tscheck_model_metadata.py::test_model_metadata",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "GET /predictions/model -> 200 {\"algorithm\":\"RandomForestRegressor\",\"is_demo\":true,\"training_samples\":1600,\"r2_score\":0.993, feature_importance len=5 summing to ~1}"
+    },
+    {
+      "criterion": "POST /api/predictions with a valid body returns a full prediction",
+      "name": "test_tscheck_prediction_valid.py::test_prediction_valid_body",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /predictions {waste_type, quantity_tons:50,...} -> 200 model_label contains 'Random Forest', processing_output_tons=35.6 within [32.7,37.6], breakdown len=3, trajectory len=4 increasing, feature_importance len=5, insights=4 non-empty strings"
+    },
+    {
+      "criterion": "POST /api/predictions rejects invalid input",
+      "name": "test_tscheck_prediction_invalid.py (4 tests)",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "quantity_tons=0 -> 422; quantity_tons=501 -> 422; moisture_level=10 and 90 -> 422; missing required fields -> 422"
+    },
+    {
+      "criterion": "Prediction dashboard loads an initial scenario from the server",
+      "name": "prediction-dashboard-loads-initial-scenario",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "prediction-dashboard-section visible, prediction-kpi-products-created shows numeric value, prediction-model-status contains 'Random Forest', demo-model-badge visible. Screenshot captured."
+    },
+    {
+      "criterion": "Changing inputs and clicking Calculate yield updates results",
+      "name": "prediction-calculate-updates-results",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Selected different waste type, set quantity slider to 120 (prediction-quantity-value='120 t'), clicked prediction-calculate-button, KPI products-created value changed, prediction-results visible, no failed HTTP responses observed. NOTE: toast assertion was removed after confirming via code inspection that no <Toaster/> is mounted (see bug above) -- kept as separate documented bug rather than failing this check."
+    },
+    {
+      "criterion": "Feature importance chart and AI recommendations render",
+      "name": "prediction-feature-importance-and-insights",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "prediction-feature-importance-chart contains >=1 SVG, prediction-model-meta text contains 'RandomForestRegressor' and '1,600', prediction-insights visible with 4 prediction-insight-N items (>=3 required)."
+    },
+    {
+      "criterion": "Quick scenario presets work",
+      "name": "prediction-preset-15t-hotel-works",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Clicked prediction-preset-15t-hotel, prediction-quantity-value shows '15 t', KPI products-created value changed from previous scenario."
+    },
+    {
+      "criterion": "Whole site still renders without errors",
+      "name": "home-site-renders-and-nav-scrolls",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Hero section visible, hero-primary-cta scrolls to prediction-dashboard-section, footer-link-partner scrolls to partner-section with partner-form visible, no HTTP>=400 responses recorded, partnership form NOT submitted."
+    }
+  ]
+}
