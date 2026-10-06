@@ -1,7 +1,7 @@
 # AJET MVP Specification
 
 ## Product
-AJET is a warm, agricultural circular-economy marketing site. It tells the story of organic waste becoming compost, biogas, soil enhancers, feed ingredients, and gardening products.
+AJET is a warm, agricultural circular-economy marketing site. It tells the story of organic waste becoming compost, biogas, soil enhancers, feed ingredients, gardening products and a composting/odor-control spray liquid (six product cards in `frontend/src/pages/Home.tsx` `products` array).
 
 ## Core flows
 - Visitors navigate the one-page story using anchored navigation and responsive mobile navigation.
