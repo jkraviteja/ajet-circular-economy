@@ -4,8 +4,10 @@
 AJET is a warm, agricultural circular-economy marketing site. It tells the story of organic waste becoming compost, biogas, soil enhancers, feed ingredients, gardening products and a composting/odor-control spray liquid (six product cards in `frontend/src/pages/Home.tsx` `products` array).
 
 ## Core flows
-- Visitors navigate the one-page story using anchored navigation and responsive mobile navigation.
-- The prediction dashboard accepts waste type, quantity, source, season, and moisture, then calls `POST /api/predictions` for a clearly labelled deterministic demo Random Forest proxy response with KPI cards and charts.
+- Routes: `/` (one-page story) and `/predictor` (dedicated AI dashboard page). `ScrollManager` in `App.tsx` handles cross-page anchors (`/#story` etc.), scroll-to-top on route change and per-route title/meta description.
+- Visitors navigate the story using the navbar (react-router `Link`s to `/#section`), mobile navigation, and the "AI predictor" link / "Audit your stream" CTA / hero CTA / teaser button / final CTA, which all open `/predictor`.
+- The main page shows a compact `PredictorTeaser` (id `prediction-dashboard`, after Impact, before Partner) instead of the inline dashboard.
+- The prediction dashboard (`PredictionDashboard standalone` on `/predictor`) accepts waste type, quantity, source, season, and moisture, then calls `POST /api/predictions` for a clearly labelled demo Random Forest response with KPI cards and charts.
 - The partnership form validates the visitor's details, stores the inquiry in MongoDB, and sends a server-rendered notification through Emergent's managed email integration to the configured AJET inbox.
 
 ## Data model

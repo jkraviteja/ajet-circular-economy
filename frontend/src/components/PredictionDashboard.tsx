@@ -31,7 +31,7 @@ function SelectField({ label, value, options, onChange, testId }: { label: strin
   );
 }
 
-export default function PredictionDashboard() {
+export default function PredictionDashboard({ standalone = false }: { standalone?: boolean }) {
   const [form, setForm] = useState<PredictionRequest>(defaultForm);
   const [result, setResult] = useState<PredictionResponse | null>(null);
   const modelInfo = useQuery({ queryKey: ["prediction-model"], queryFn: () => apiGet<ModelInfo>("/predictions/model") });
@@ -48,17 +48,17 @@ export default function PredictionDashboard() {
   const applyPreset = (next: PredictionRequest) => { setForm(next); mutation.mutate(next); };
 
   return (
-    <section id="prediction-dashboard" className="relative overflow-hidden bg-[#143d2b] px-4 py-24 text-[#f3efe6] sm:px-6 lg:px-8 lg:py-32" data-testid="prediction-dashboard-section">
+    <section id="prediction-dashboard" className={`relative overflow-hidden bg-[#143d2b] px-4 text-[#f3efe6] sm:px-6 lg:px-8 ${standalone ? "pb-24 pt-4 lg:pb-32" : "py-24 lg:py-32"}`} data-testid="prediction-dashboard-section">
       <div className="pointer-events-none absolute -right-40 top-20 size-96 rounded-full border border-[#c9e1ba]/20" />
       <div className="pointer-events-none absolute bottom-0 left-0 h-80 w-80 rounded-full bg-[#d97706]/10 blur-3xl" />
-      <div className="relative mx-auto max-w-7xl">
-        <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_0.8fr] lg:items-end">
+      <div className={`relative mx-auto ${standalone ? "max-w-[1400px]" : "max-w-7xl"}`}>
+        {!standalone && <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_0.8fr] lg:items-end">
           <div>
             <div className="mb-5 flex flex-wrap items-center gap-3" data-testid="prediction-dashboard-kicker"><span className="eyebrow text-[#b7d5a9]">AJET intelligence lab</span><span className="rounded-full border border-[#b7d5a9]/30 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[#c9e1ba]" data-testid="demo-model-badge">Demo / sample data</span></div>
             <h2 className="max-w-3xl font-serif text-4xl font-semibold leading-[1.06] tracking-tight sm:text-5xl" data-testid="prediction-dashboard-heading">Turn one waste stream into a clear yield scenario.</h2>
           </div>
           <p className="max-w-md text-base leading-7 text-[#c9d8cc] lg:justify-self-end" data-testid="prediction-dashboard-description">A transparent prototype for operations teams. Adjust the feedstock, and the model translates its potential into products, value, time and avoided emissions.</p>
-        </div>
+        </div>}
         <div className="mb-8 grid gap-3 sm:grid-cols-3" data-testid="prediction-flow">
           {["Input waste data", "Random Forest model runs", "Review yield + impact"].map((step, index) => <div key={step} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3" data-testid={`prediction-flow-step-${index + 1}`}><span className="grid size-7 shrink-0 place-items-center rounded-full bg-[#d97706] font-mono text-xs font-bold text-white">0{index + 1}</span><span className="text-sm font-semibold text-[#e4f0e4]">{step}</span>{index < 2 && <ArrowRight size={15} className="ml-auto hidden text-[#92b98c] sm:block" />}</div>)}
         </div>

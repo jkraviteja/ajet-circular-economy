@@ -132,4 +132,5 @@
 
 .font-serif { font-family: "Playfair Display Variable", Georgia, serif; }
 .eyebrow { @apply font-mono text-[10px] font-semibold uppercase tracking-[0.2em]; }
+section[id] { scroll-margin-top: 5.5rem; }
 button, a, input, select, textarea { transition-property: color, background-color, border-color, opacity, transform, box-shadow; }
