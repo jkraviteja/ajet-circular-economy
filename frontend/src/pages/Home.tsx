@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowDownRight, ArrowRight, ArrowUpRight, Check, Circle, Factory, Leaf, Recycle, Sprout, Zap } from "lucide-react";
+import { ArrowDownRight, ArrowRight, ArrowUpRight, Check, Factory, Leaf, Recycle, Sprout, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import PartnerSection from "@/components/PartnerSection";
 import PredictorTeaser from "@/components/PredictorTeaser";
@@ -38,12 +37,13 @@ function ImpactMetric({ target, suffix, label, detail, testId }: { target: numbe
   const [value, setValue] = useState(0);
   useEffect(() => {
     const start = performance.now();
+    let frame = 0;
     const tick = (now: number) => {
       const progress = Math.min((now - start) / 1300, 1);
       setValue(Math.floor(target * (1 - Math.pow(1 - progress, 3))));
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) frame = requestAnimationFrame(tick);
     };
-    const frame = requestAnimationFrame(tick);
+    frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [target]);
   return <div className="border-t border-[#d8d4c8] pt-5 dark:border-white/10" data-testid={testId}><p className="font-mono text-3xl font-semibold tracking-tight text-[#143d2b] dark:text-[#d8ebd4]">{value.toLocaleString()}{suffix}</p><p className="mt-2 text-sm font-semibold text-[#24352b] dark:text-[#e4f0e4]" data-testid={`${testId}-label`}>{label}</p><p className="mt-1 text-xs leading-5 text-[#68766c] dark:text-[#a8bcab]">{detail}</p></div>;

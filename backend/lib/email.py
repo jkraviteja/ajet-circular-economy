@@ -68,29 +68,45 @@ class _EmailScan(HTMLParser):
             self._href, self._text = None, []
 
 
-def _assert_safe_email(subject: str, html: str) -> None:
-    scan = _EmailScan()
-    scan.feed(html)
+def _assert_no_forms(scan: _EmailScan) -> None:
     if scan.tags & {"form", "input", "textarea", "select"}:
         raise ValueError("No forms or input fields in email")
+
+
+def _assert_no_credential_ask(subject: str, html: str) -> None:
     body = f"{subject}\n{html}".lower()
     for phrase in _CRED_ASK:
         if phrase in body:
             raise ValueError(f"Email asks the recipient for credentials: {phrase!r}")
+
+
+def _assert_url_safe(url: str) -> None:
+    low = url.strip().lower()
+    if low.startswith(("mailto:", "tel:", "cid:", "#")):
+        return
+    if not low.startswith("https://"):
+        raise ValueError(f"Email links/assets must be absolute https: {url!r}")
+    parsed = urlparse(low)
+    if not _host_ok(parsed.hostname or "") or parsed.username is not None:
+        raise ValueError(f"Unsafe email URL: {url!r}")
+
+
+def _assert_anchor_text_matches(href: str, text: str) -> None:
+    real = urlparse(href.strip().lower()).hostname or ""
+    for match in _HOSTISH.finditer(text):
+        if not _same_site(match.group(1).lower(), real):
+            raise ValueError(f"Anchor text {match.group(1)!r} does not match link host")
+
+
+def _assert_safe_email(subject: str, html: str) -> None:
+    scan = _EmailScan()
+    scan.feed(html)
+    _assert_no_forms(scan)
+    _assert_no_credential_ask(subject, html)
     for url in scan.urls:
-        low = url.strip().lower()
-        if low.startswith(("mailto:", "tel:", "cid:", "#")):
-            continue
-        if not low.startswith("https://"):
-            raise ValueError(f"Email links/assets must be absolute https: {url!r}")
-        parsed = urlparse(low)
-        if not _host_ok(parsed.hostname or "") or parsed.username is not None:
-            raise ValueError(f"Unsafe email URL: {url!r}")
+        _assert_url_safe(url)
     for href, text in scan.anchors:
-        real = urlparse(href.strip().lower()).hostname or ""
-        for match in _HOSTISH.finditer(text):
-            if not _same_site(match.group(1).lower(), real):
-                raise ValueError(f"Anchor text {match.group(1)!r} does not match link host")
+        _assert_anchor_text_matches(href, text)
 
 
 async def send_email(*, to: str, subject: str, html: str, reply_to: str | None = None) -> str | None:

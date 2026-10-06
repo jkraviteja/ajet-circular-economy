@@ -19,6 +19,76 @@ const defaultForm: PredictionRequest = {
 };
 
 const tooltipStyle = { background: "#143d2b", border: "1px solid #436a4e", borderRadius: 12, color: "#f3efe6" };
+const axisTick = { fontSize: 10 };
+const importanceMargin = { left: 8, right: 16 };
+const importanceDomain: [number, number] = [0, 1];
+const importanceBarRadius: [number, number, number, number] = [0, 6, 6, 0];
+const formatPercent = (value: number) => `${Math.round(value * 100)}%`;
+
+function KpiCards({ result }: { result: PredictionResponse }) {
+  const cards = [
+    ["Waste forecast", `${result.predicted_volume_tons} t`, "next input"],
+    ["Products created", `${result.processing_output_tons} t`, `range ${result.output_range_low_tons}–${result.output_range_high_tons} t`],
+    ["Market value", `$${result.estimated_market_value_usd.toLocaleString()}`, "estimated"],
+    ["CO₂ avoided", `${result.co2_reduction_tons} t`, "landfill equivalent"],
+  ];
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {cards.map(([label, value, sub]) => <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.06] p-4" data-testid={`prediction-kpi-${label.toLowerCase().replaceAll(" ", "-")}`}><p className="text-[11px] font-semibold text-[#a8bcab]">{label}</p><p className="mt-2 font-serif text-2xl font-semibold text-[#f3efe6]">{value}</p><p className="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[#7f9f72]">{sub}</p></div>)}
+    </div>
+  );
+}
+
+function TrajectoryChart({ data }: { data: PredictionResponse["trajectory"] }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-[#0c2a1b]/40 p-4" data-testid="prediction-trajectory-chart">
+      <div className="mb-3 flex items-center justify-between"><p className="text-sm font-semibold">Four-week output trajectory</p><span className="font-mono text-[10px] text-[#9dc592]">TONNES</span></div>
+      <div className="h-48"><ResponsiveContainer width="100%" height="100%"><AreaChart data={data}><defs><linearGradient id="yieldFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#9dc592" stopOpacity={0.7} /><stop offset="100%" stopColor="#9dc592" stopOpacity={0.03} /></linearGradient></defs><XAxis dataKey="week" stroke="#7f9f72" tickLine={false} axisLine={false} tick={axisTick} /><YAxis stroke="#7f9f72" tickLine={false} axisLine={false} tick={axisTick} width={30} /><Tooltip contentStyle={tooltipStyle} /><Area type="monotone" dataKey="output" stroke="#c9e1ba" fill="url(#yieldFill)" strokeWidth={2} /></AreaChart></ResponsiveContainer></div>
+    </div>
+  );
+}
+
+function ProductMixChart({ data }: { data: PredictionResponse["breakdown"] }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-[#0c2a1b]/40 p-4" data-testid="prediction-breakdown-chart">
+      <div className="mb-3 flex items-center justify-between"><p className="text-sm font-semibold">Product mix</p><span className="font-mono text-[10px] text-[#9dc592]">OUTPUT</span></div>
+      <div className="grid grid-cols-[0.9fr_1.1fr] items-center gap-2">
+        <div className="h-44"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={data} dataKey="value" nameKey="name" innerRadius={43} outerRadius={66} paddingAngle={4}>{data.map((entry) => <Cell key={entry.name} fill={entry.color} />)}</Pie><Tooltip contentStyle={tooltipStyle} /></PieChart></ResponsiveContainer></div>
+        <div className="grid gap-3">{data.map((entry) => <div key={entry.name} className="flex items-center gap-2 text-xs"><span className="size-2 rounded-full" style={{ backgroundColor: entry.color }} /><span className="min-w-0 flex-1 text-[#c9d8cc]">{entry.name}</span><strong className="font-mono text-[#f3efe6]">{entry.value}{entry.unit}</strong></div>)}</div>
+      </div>
+    </div>
+  );
+}
+
+function FeatureImportanceChart({ data, model }: { data: PredictionResponse["feature_importance"]; model?: ModelInfo }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-[#0c2a1b]/40 p-4" data-testid="prediction-feature-importance-chart">
+      <div className="mb-3 flex items-center justify-between"><p className="text-sm font-semibold">What drives the forecast</p><span className="font-mono text-[10px] text-[#9dc592]">FEATURE IMPORTANCE</span></div>
+      <div className="h-40"><ResponsiveContainer width="100%" height="100%"><BarChart data={data} layout="vertical" margin={importanceMargin}><XAxis type="number" hide domain={importanceDomain} /><YAxis type="category" dataKey="feature" stroke="#7f9f72" tickLine={false} axisLine={false} tick={axisTick} width={92} /><Tooltip contentStyle={tooltipStyle} formatter={formatPercent} /><Bar dataKey="importance" radius={importanceBarRadius}>{data.map((entry, index) => <Cell key={entry.feature} fill={index === 0 ? "#d97706" : "#7f9f72"} />)}</Bar></BarChart></ResponsiveContainer></div>
+      {model && <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#7f9f72]" data-testid="prediction-model-meta">{model.algorithm} · {model.training_samples.toLocaleString()} synthetic samples · R² {model.r2_score}</p>}
+    </div>
+  );
+}
+
+function InsightsPanel({ insights }: { insights: string[] }) {
+  return (
+    <div className="rounded-2xl border border-[#d97706]/30 bg-[#d97706]/10 p-4" data-testid="prediction-insights">
+      <div className="mb-3 flex items-center gap-2"><Lightbulb size={16} className="text-[#efb36b]" /><p className="text-sm font-semibold">AI recommendations</p><span className="ml-auto font-mono text-[10px] uppercase tracking-[0.12em] text-[#efb36b]">Demo</span></div>
+      <ul className="grid gap-2.5">{insights.map((note, index) => <li key={note} className="flex gap-2.5 text-sm leading-6 text-[#e4ead9]" data-testid={`prediction-insight-${index + 1}`}><span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#efb36b]" />{note}</li>)}</ul>
+    </div>
+  );
+}
+
+function ResultsPanel({ result, model }: { result: PredictionResponse; model?: ModelInfo }) {
+  return (
+    <>
+      <KpiCards result={result} />
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]"><TrajectoryChart data={result.trajectory} /><ProductMixChart data={result.breakdown} /></div>
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3"><div className="rounded-xl bg-[#b7d5a9]/10 px-4 py-3" data-testid="prediction-compost-output"><p className="text-[10px] uppercase tracking-[0.14em] text-[#9dc592]">Compost yield</p><p className="mt-1 font-mono text-lg font-semibold">{result.compost_yield_tons} t</p></div><div className="rounded-xl bg-[#b7d5a9]/10 px-4 py-3" data-testid="prediction-biogas-output"><p className="text-[10px] uppercase tracking-[0.14em] text-[#9dc592]">Biogas potential</p><p className="mt-1 font-mono text-lg font-semibold">{result.biogas_yield_m3.toLocaleString()} m³</p></div><div className="col-span-2 rounded-xl bg-[#d97706]/15 px-4 py-3 sm:col-span-1" data-testid="prediction-time-output"><p className="text-[10px] uppercase tracking-[0.14em] text-[#efb36b]">Processing window</p><p className="mt-1 font-mono text-lg font-semibold text-[#f3efe6]">{result.processing_time_days} days</p></div></div>
+      <div className="mt-5 grid gap-5 xl:grid-cols-[0.9fr_1.1fr]"><FeatureImportanceChart data={result.feature_importance} model={model} /><InsightsPanel insights={result.insights} /></div>
+    </>
+  );
+}
 
 function SelectField({ label, value, options, onChange, testId }: { label: string; value: string; options: string[]; onChange: (value: string) => void; testId: string }) {
   return (
@@ -82,22 +152,7 @@ export default function PredictionDashboard({ standalone = false }: { standalone
                 {initial.isError ? <p className="text-sm text-[#efb36b]">The model service is unavailable. Press “Calculate yield” to retry.</p> : <span className="inline-flex items-center gap-2 text-sm text-[#c9d8cc]"><Loader2 className="animate-spin" size={16} /> Training demo forest and running the first scenario…</span>}
               </div>
             ) : (
-              <>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{[["Waste forecast", `${shown.predicted_volume_tons} t`, "next input"], ["Products created", `${shown.processing_output_tons} t`, `range ${shown.output_range_low_tons}–${shown.output_range_high_tons} t`], ["Market value", `$${shown.estimated_market_value_usd.toLocaleString()}`, "estimated"], ["CO₂ avoided", `${shown.co2_reduction_tons} t`, "landfill equivalent"]].map(([label, value, sub]) => <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.06] p-4" data-testid={`prediction-kpi-${(label as string).toLowerCase().replaceAll(" ", "-")}`}><p className="text-[11px] font-semibold text-[#a8bcab]">{label}</p><p className="mt-2 font-serif text-2xl font-semibold text-[#f3efe6]">{value}</p><p className="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[#7f9f72]">{sub}</p></div>)}</div>
-                <div className="mt-6 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]"><div className="rounded-2xl border border-white/10 bg-[#0c2a1b]/40 p-4" data-testid="prediction-trajectory-chart"><div className="mb-3 flex items-center justify-between"><p className="text-sm font-semibold">Four-week output trajectory</p><span className="font-mono text-[10px] text-[#9dc592]">TONNES</span></div><div className="h-48"><ResponsiveContainer width="100%" height="100%"><AreaChart data={shown.trajectory}><defs><linearGradient id="yieldFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#9dc592" stopOpacity={0.7} /><stop offset="100%" stopColor="#9dc592" stopOpacity={0.03} /></linearGradient></defs><XAxis dataKey="week" stroke="#7f9f72" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} /><YAxis stroke="#7f9f72" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} width={30} /><Tooltip contentStyle={tooltipStyle} /><Area type="monotone" dataKey="output" stroke="#c9e1ba" fill="url(#yieldFill)" strokeWidth={2} /></AreaChart></ResponsiveContainer></div></div><div className="rounded-2xl border border-white/10 bg-[#0c2a1b]/40 p-4" data-testid="prediction-breakdown-chart"><div className="mb-3 flex items-center justify-between"><p className="text-sm font-semibold">Product mix</p><span className="font-mono text-[10px] text-[#9dc592]">OUTPUT</span></div><div className="grid grid-cols-[0.9fr_1.1fr] items-center gap-2"><div className="h-44"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={shown.breakdown} dataKey="value" nameKey="name" innerRadius={43} outerRadius={66} paddingAngle={4}>{shown.breakdown.map((entry) => <Cell key={entry.name} fill={entry.color} />)}</Pie><Tooltip contentStyle={tooltipStyle} /></PieChart></ResponsiveContainer></div><div className="grid gap-3">{shown.breakdown.map((entry) => <div key={entry.name} className="flex items-center gap-2 text-xs"><span className="size-2 rounded-full" style={{ backgroundColor: entry.color }} /><span className="min-w-0 flex-1 text-[#c9d8cc]">{entry.name}</span><strong className="font-mono text-[#f3efe6]">{entry.value}{entry.unit}</strong></div>)}</div></div></div></div>
-                <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3"><div className="rounded-xl bg-[#b7d5a9]/10 px-4 py-3" data-testid="prediction-compost-output"><p className="text-[10px] uppercase tracking-[0.14em] text-[#9dc592]">Compost yield</p><p className="mt-1 font-mono text-lg font-semibold">{shown.compost_yield_tons} t</p></div><div className="rounded-xl bg-[#b7d5a9]/10 px-4 py-3" data-testid="prediction-biogas-output"><p className="text-[10px] uppercase tracking-[0.14em] text-[#9dc592]">Biogas potential</p><p className="mt-1 font-mono text-lg font-semibold">{shown.biogas_yield_m3.toLocaleString()} m³</p></div><div className="col-span-2 rounded-xl bg-[#d97706]/15 px-4 py-3 sm:col-span-1" data-testid="prediction-time-output"><p className="text-[10px] uppercase tracking-[0.14em] text-[#efb36b]">Processing window</p><p className="mt-1 font-mono text-lg font-semibold text-[#f3efe6]">{shown.processing_time_days} days</p></div></div>
-                <div className="mt-5 grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-                  <div className="rounded-2xl border border-white/10 bg-[#0c2a1b]/40 p-4" data-testid="prediction-feature-importance-chart">
-                    <div className="mb-3 flex items-center justify-between"><p className="text-sm font-semibold">What drives the forecast</p><span className="font-mono text-[10px] text-[#9dc592]">FEATURE IMPORTANCE</span></div>
-                    <div className="h-40"><ResponsiveContainer width="100%" height="100%"><BarChart data={shown.feature_importance} layout="vertical" margin={{ left: 8, right: 16 }}><XAxis type="number" hide domain={[0, 1]} /><YAxis type="category" dataKey="feature" stroke="#7f9f72" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} width={92} /><Tooltip contentStyle={tooltipStyle} formatter={(value: number) => `${Math.round(value * 100)}%`} /><Bar dataKey="importance" radius={[0, 6, 6, 0]}>{shown.feature_importance.map((entry, index) => <Cell key={entry.feature} fill={index === 0 ? "#d97706" : "#7f9f72"} />)}</Bar></BarChart></ResponsiveContainer></div>
-                    {modelInfo.data && <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#7f9f72]" data-testid="prediction-model-meta">{modelInfo.data.algorithm} · {modelInfo.data.training_samples.toLocaleString()} synthetic samples · R² {modelInfo.data.r2_score}</p>}
-                  </div>
-                  <div className="rounded-2xl border border-[#d97706]/30 bg-[#d97706]/10 p-4" data-testid="prediction-insights">
-                    <div className="mb-3 flex items-center gap-2"><Lightbulb size={16} className="text-[#efb36b]" /><p className="text-sm font-semibold">AI recommendations</p><span className="ml-auto font-mono text-[10px] uppercase tracking-[0.12em] text-[#efb36b]">Demo</span></div>
-                    <ul className="grid gap-2.5">{shown.insights.map((note, index) => <li key={note} className="flex gap-2.5 text-sm leading-6 text-[#e4ead9]" data-testid={`prediction-insight-${index + 1}`}><span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#efb36b]" />{note}</li>)}</ul>
-                  </div>
-                </div>
-              </>
+              <ResultsPanel result={shown} model={modelInfo.data} />
             )}
           </div>
         </div>

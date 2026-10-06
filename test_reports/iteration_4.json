@@ -1,0 +1,74 @@
+{
+  "iteration": 4,
+  "summary": "Retest of ScrollManager fix (window.scrollTo({top:0, behavior:'instant'}) on route change). Backend suite (11 tests) re-run clean. All 5 existing browser checks re-run by name, including the previously-failing 'home-teaser-and-impact-counters' which exercises the teaser->/predictor scroll-to-top flow. All PASSED. The iteration_3 bug is confirmed fixed.",
+  "passed": 10,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "GET /api/predictions/model returns Random Forest metadata",
+      "name": "test_tscheck_model_metadata.py::test_model_metadata",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "cd /app/backend && python -m pytest -q: 11 passed in 1.20s"
+    },
+    {
+      "criterion": "POST /api/predictions with a valid body returns a full prediction",
+      "name": "test_tscheck_prediction_valid.py::test_prediction_valid_body",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "11 passed in 1.20s"
+    },
+    {
+      "criterion": "POST /api/predictions rejects invalid input",
+      "name": "test_tscheck_prediction_invalid.py (4 tests)",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "11 passed in 1.20s"
+    },
+    {
+      "criterion": "Email safety guard still rejects unsafe HTML",
+      "name": "test_tscheck_email_safety_guard.py (5 tests)",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "11 passed in 1.20s full suite"
+    },
+    {
+      "criterion": "Teaser button lands at the top of /predictor",
+      "name": "home-teaser-and-impact-counters",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check (mode: reran-persisted) against public preview URL. PASSED: impact counters animate, nav-link-products scroll works, and predictor-teaser-open-button navigates to /predictor landing at scrollY 0 after KPI cards render -- previously failed with scrollY=876, now fixed by ScrollManager using behavior:'instant'. Screenshot: home-teaser-and-impact-counters-home-teaser-flow.png. No console errors."
+    },
+    {
+      "criterion": "Predictor page renders the full dashboard after refactor",
+      "name": "predictor-dashboard-full-render",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check. PASSED, all dashboard elements visible, no console errors."
+    },
+    {
+      "criterion": "Calculate yield still updates results and shows toast",
+      "name": "predictor-calculate-updates-and-toasts",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check. PASSED, toast and KPI update confirmed."
+    },
+    {
+      "criterion": "Quick preset still works",
+      "name": "predictor-preset-15t-hotel-works",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check. PASSED, preset applies and recalculates."
+    },
+    {
+      "criterion": "Cross-page anchor navigation from /predictor",
+      "name": "predictor-cross-page-anchor-nav",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check. PASSED, nav-link-story scrolls to #story section."
+    }
+  ]
+}

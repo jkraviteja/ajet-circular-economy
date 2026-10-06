@@ -1,0 +1,86 @@
+{
+  "iteration": 3,
+  "summary": "Retest after refactor moving the prediction dashboard to /predictor with a home-page teaser. Backend suite (11 tests, incl. new email-safety-guard unit tests) passes clean. Rewrote 5 obsolete home-page-based browser checks to target /predictor and added 3 new checks for the teaser/impact-counter/cross-page-nav criteria. Found ONE real frontend bug: clicking predictor-teaser-open-button on '/' navigates to /predictor but lands at scrollY 876 instead of 0 (SPA route change does not reset scroll position), reproduced twice (not flaky). All other criteria pass.",
+  "passed": 10,
+  "failed": 1,
+  "bugs": [
+    {
+      "severity": "medium",
+      "criterion": "Home page navigation and animated impact counters work",
+      "description": "Clicking predictor-teaser-open-button on '/' (after the page is scrolled down to the teaser section) navigates to /predictor but the new route renders already scrolled to window.scrollY=876 instead of 0, so the user lands mid-dashboard instead of at the top of the predictor page.",
+      "evidence": "Browser check 'home-teaser-and-impact-counters' failed twice (not flaky) with 'Expected scrollY 0 on /predictor navigation, got 876'. Screenshot /root/.emergent/automation_output/20261006_164622_361/home-teaser-and-impact-counters-failure.png shows the predictor form/footer in view, not the top of the page, confirming the SPA router does not scroll-to-top on navigation. Backend is unaffected (pure frontend routing issue)."
+    }
+  ],
+  "action_items": [
+    {
+      "type": "bug_fix_needed",
+      "detail": "Add a scroll-to-top-on-route-change effect (e.g. in a router layout/ScrollManager) so client-side navigations like the predictor-teaser-open-button land at scrollY 0 on the destination route."
+    }
+  ],
+  "retest_needed": true,
+  "checks": [
+    {
+      "criterion": "GET /api/predictions/model returns Random Forest metadata",
+      "name": "test_tscheck_model_metadata.py::test_model_metadata",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "Re-ran suite: 11 passed in 1.28s (cd /app/backend && python -m pytest -q)"
+    },
+    {
+      "criterion": "POST /api/predictions with a valid body returns a full prediction",
+      "name": "test_tscheck_prediction_valid.py::test_prediction_valid_body",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "Re-ran suite: 11 passed in 1.28s"
+    },
+    {
+      "criterion": "POST /api/predictions rejects invalid input",
+      "name": "test_tscheck_prediction_invalid.py (4 tests)",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "Re-ran suite: 11 passed in 1.28s"
+    },
+    {
+      "criterion": "Email safety guard still rejects unsafe HTML",
+      "name": "test_tscheck_email_safety_guard.py (5 tests)",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "New test file imports backend.lib.email._assert_safe_email directly and asserts ValueError for <form> content, http:// link, credential-ask phrase 'reply with your password', and mismatched anchor text 'bank.com' pointing to a different host, plus a passing case for safe https html. 5 passed in 1.06s standalone, 11 passed in full suite."
+    },
+    {
+      "criterion": "Predictor page renders the full dashboard after refactor",
+      "name": "predictor-dashboard-full-render",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Navigated to /predictor via public preview URL https://waste-yield.preview.emergentagent.com. prediction-form, KPI with numeric value, prediction-trajectory-chart (SVG), prediction-breakdown-chart (SVG), prediction-feature-importance-chart (SVG), prediction-model-meta containing 'RandomForestRegressor', and >=3 prediction-insight-* items all visible. No HTTP>=400, no console errors."
+    },
+    {
+      "criterion": "Calculate yield still updates results and shows toast",
+      "name": "predictor-calculate-updates-and-toasts",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "On /predictor, changed waste type select, set slider to 120 (verified prediction-quantity-value='120 t'), clicked prediction-calculate-button. 'Scenario recalculated' toast became visible and the KPI text changed from its prior value. No failed HTTP requests."
+    },
+    {
+      "criterion": "Quick preset still works",
+      "name": "predictor-preset-15t-hotel-works",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "On /predictor, clicked prediction-preset-15t-hotel; prediction-quantity-value became '15 t' and the products-created KPI text changed within 10s, confirming recalculation."
+    },
+    {
+      "criterion": "Home page navigation and animated impact counters work",
+      "name": "home-teaser-and-impact-counters",
+      "lane": "browser",
+      "status": "failed",
+      "evidence": "impact-metric-diverted counter animation completed to a non-zero value (passed) and nav-link-products scroll (passed, #products top within 150px after retry-wait). FAILED on final step: predictor-teaser-open-button navigates to /predictor but with scrollY=876, not 0. See bugs[0]."
+    },
+    {
+      "criterion": "Cross-page anchor navigation from /predictor",
+      "name": "predictor-cross-page-anchor-nav",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "On /predictor, clicked nav-link-story; URL became '/#story', #story section landed within 100px of viewport top, and document.title read 'AJET — Nothing is Waste'."
+    }
+  ]
+}
